@@ -63,7 +63,7 @@ public class SellerDaoJDBC implements SellerDao {
   @Override
   public void update(Seller seller) {
     PreparedStatement st = null;
-System.out.println(seller);
+
     try {
       st = conn.prepareStatement(
         "UPDATE seller "+
@@ -88,8 +88,17 @@ System.out.println(seller);
 
   @Override
   public void deleteById(Integer id) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    PreparedStatement st = null;
+    
+    try {
+      st = conn.prepareStatement("DELETE FROM seller\rWHERE Id = ?");
+      st.setInt(1, id);
+      st.executeUpdate();
+    } catch(SQLException e) {
+      throw new DbException(e.getMessage());
+    } finally {
+      DB.closeStatement(st);
+    }
   }
 
   @Override
